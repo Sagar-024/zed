@@ -60,9 +60,15 @@ impl PaneGroup {
         &mut self,
         old_pane: &Entity<Pane>,
         new_pane: &Entity<Pane>,
-        direction: SplitDirection,
+        mut direction: SplitDirection,
         cx: &mut App,
     ) {
+        direction = match direction {
+            SplitDirection::Up => SplitDirection::Left,
+            SplitDirection::Down => SplitDirection::Right,
+            other => other,
+        };
+
         let found = match &mut self.root {
             Member::Pane(pane) => {
                 if pane == old_pane {
@@ -497,10 +503,7 @@ impl Member {
         use Axis::*;
         use SplitDirection::*;
 
-        let axis = match direction {
-            Up | Down => Vertical,
-            Left | Right => Horizontal,
-        };
+        let axis = Horizontal;
 
         let members = match direction {
             Up | Left => vec![Member::Pane(new_pane), Member::Pane(old_pane)],
