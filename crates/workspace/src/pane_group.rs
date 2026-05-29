@@ -1356,10 +1356,18 @@ mod element {
             for (ix, mut child) in mem::take(&mut self.children).into_iter().enumerate() {
                 let child_flex = flexes[ix];
 
-                let child_size = bounds
-                    .size
-                    .apply_along(self.axis, |_| space_per_flex * child_flex)
-                    .map(|d| d.round());
+                let child_size = if self.axis == Axis::Horizontal {
+                    // Niri layout: Enforce a fixed width (e.g. 800px) instead of dividing space
+                    bounds
+                        .size
+                        .apply_along(self.axis, |_| px(800.))
+                        .map(|d| d.round())
+                } else {
+                    bounds
+                        .size
+                        .apply_along(self.axis, |_| space_per_flex * child_flex)
+                        .map(|d| d.round())
+                };
 
                 let child_bounds = Bounds {
                     origin,
