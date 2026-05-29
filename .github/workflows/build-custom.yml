@@ -21,7 +21,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: windows-cargo-${{ hashFiles(**/Cargo.lock) }}
+          key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: windows-cargo-
 
       - name: Build Zed
