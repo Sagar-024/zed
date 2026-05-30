@@ -1535,6 +1535,25 @@ impl Div {
         self.prepaint_order_fn = Some(Box::new(order_fn));
         self
     }
+
+    /// Set the overflow x and y to scroll.
+    pub fn overflow_scroll(mut self) -> Self {
+        self.interactivity().base_style.overflow.x = Some(Overflow::Scroll);
+        self.interactivity().base_style.overflow.y = Some(Overflow::Scroll);
+        self
+    }
+
+    /// Set the overflow x to scroll.
+    pub fn overflow_x_scroll(mut self) -> Self {
+        self.interactivity().base_style.overflow.x = Some(Overflow::Scroll);
+        self
+    }
+
+    /// Set the overflow y to scroll.
+    pub fn overflow_y_scroll(mut self) -> Self {
+        self.interactivity().base_style.overflow.y = Some(Overflow::Scroll);
+        self
+    }
 }
 
 /// A frame state for a `Div` element, which contains layout IDs for its children.
