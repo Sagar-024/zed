@@ -1408,6 +1408,7 @@ pub struct Workspace {
     _panels_task: Option<Task<Result<()>>>,
     sidebar_focus_handle: Option<FocusHandle>,
     multi_workspace: Option<WeakEntity<MultiWorkspace>>,
+    pub(crate) pane_scroll_handle: gpui::ScrollHandle,
     active_worktree_creation: ActiveWorktreeCreation,
     deferred_save_items: Vec<Box<dyn WeakItemHandle>>,
 }
@@ -1852,6 +1853,7 @@ impl Workspace {
             removing: false,
             sidebar_focus_handle: None,
             multi_workspace,
+            pane_scroll_handle: gpui::ScrollHandle::new(),
             active_worktree_creation: ActiveWorktreeCreation::default(),
             open_in_dev_container: false,
             _dev_container_task: None,
@@ -8606,6 +8608,7 @@ impl Render for Workspace {
                                                             h_flex()
                                                                 .flex_1()
                                                                 .overflow_x_scroll()
+                                                                .track_scroll(&self.pane_scroll_handle)
                                                                 .when_some(paddings.0, |this, p| {
                                                                     this.child(p.border_r_1())
                                                                 })
@@ -8621,6 +8624,10 @@ impl Render for Workspace {
                                                                         this.child(p.border_l_1())
                                                                     },
                                                                 ),
+                                                        )
+                                                        .child(
+                                                            ui::Scrollbars::new(ui::ScrollAxes::Horizontal)
+                                                                .tracked_scroll_handle(&self.pane_scroll_handle)
                                                         ),
                                                 )
                                                 .children(self.render_dock(
@@ -8668,6 +8675,7 @@ impl Render for Workspace {
                                                                     h_flex()
                                                                         .flex_1()
                                                                         .overflow_x_scroll()
+                                                                        .track_scroll(&self.pane_scroll_handle)
                                                                         .when_some(
                                                                             paddings.0,
                                                                             |this, p| {
@@ -8690,6 +8698,10 @@ impl Render for Workspace {
                                                                                 )
                                                                             },
                                                                         ),
+                                                                )
+                                                                .child(
+                                                                    ui::Scrollbars::new(ui::ScrollAxes::Horizontal)
+                                                                        .tracked_scroll_handle(&self.pane_scroll_handle)
                                                                 ),
                                                         ),
                                                 )
