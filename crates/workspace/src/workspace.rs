@@ -144,7 +144,7 @@ pub use toolbar::{
     PaneSearchBarCallbacks, Toolbar, ToolbarItemEvent, ToolbarItemLocation, ToolbarItemView,
 };
 pub use ui;
-use ui::{Window, prelude::*};
+use ui::{Scrollbars, ScrollAxes, WithScrollbar, Window, prelude::*};
 use util::{
     ResultExt, TryFutureExt,
     paths::{PathStyle, SanitizedPath},
@@ -8608,7 +8608,12 @@ impl Render for Workspace {
                                                             h_flex()
                                                                 .flex_1()
                                                                 .overflow_x_scroll()
-                                                                .track_scroll(&self.pane_scroll_handle)
+                                                                .custom_scrollbars(
+                                                                    Scrollbars::new(ScrollAxes::Horizontal)
+                                                                        .tracked_scroll_handle(&self.pane_scroll_handle),
+                                                                    window,
+                                                                    cx,
+                                                                )
                                                                 .when_some(paddings.0, |this, p| {
                                                                     this.child(p.border_r_1())
                                                                 })
@@ -8624,10 +8629,6 @@ impl Render for Workspace {
                                                                         this.child(p.border_l_1())
                                                                     },
                                                                 ),
-                                                        )
-                                                        .child(
-                                                            ui::Scrollbars::new(ui::ScrollAxes::Horizontal)
-                                                                .tracked_scroll_handle(&self.pane_scroll_handle)
                                                         ),
                                                 )
                                                 .children(self.render_dock(
@@ -8675,7 +8676,12 @@ impl Render for Workspace {
                                                                     h_flex()
                                                                         .flex_1()
                                                                         .overflow_x_scroll()
-                                                                        .track_scroll(&self.pane_scroll_handle)
+                                                                        .custom_scrollbars(
+                                                                            Scrollbars::new(ScrollAxes::Horizontal)
+                                                                                .tracked_scroll_handle(&self.pane_scroll_handle),
+                                                                            window,
+                                                                            cx,
+                                                                        )
                                                                         .when_some(
                                                                             paddings.0,
                                                                             |this, p| {
@@ -8698,10 +8704,6 @@ impl Render for Workspace {
                                                                                 )
                                                                             },
                                                                         ),
-                                                                )
-                                                                .child(
-                                                                    ui::Scrollbars::new(ui::ScrollAxes::Horizontal)
-                                                                        .tracked_scroll_handle(&self.pane_scroll_handle)
                                                                 ),
                                                         ),
                                                 )
