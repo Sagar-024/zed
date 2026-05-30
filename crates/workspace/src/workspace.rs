@@ -8605,6 +8605,7 @@ impl Render for Workspace {
                                                         .child(
                                                             h_flex()
                                                                 .flex_1()
+                                                                .overflow_x_scroll()
                                                                 .when_some(paddings.0, |this, p| {
                                                                     this.child(p.border_r_1())
                                                                 })
@@ -8666,6 +8667,7 @@ impl Render for Workspace {
                                                                 .child(
                                                                     h_flex()
                                                                         .flex_1()
+                                                                        .overflow_x_scroll()
                                                                         .when_some(
                                                                             paddings.0,
                                                                             |this, p| {
