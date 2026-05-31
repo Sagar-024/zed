@@ -5420,6 +5420,14 @@ impl Workspace {
         cx: &mut Context<Self>,
     ) {
         self.active_pane = pane.clone();
+        
+        // Auto-scroll to the newly active pane
+        let panes = self.center.panes();
+        if let Some(index) = panes.iter().position(|p| *p == pane) {
+            let offset_x = index as f32 * 800.0;
+            self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
+        }
+
         self.active_item_path_changed(true, window, cx);
         self.last_active_center_pane = Some(pane.downgrade());
     }
