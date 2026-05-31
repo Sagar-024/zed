@@ -8608,7 +8608,6 @@ impl Render for Workspace {
                                                             h_flex()
                                                                 .flex_1()
                                                                 .overflow_x_scroll()
-                                                                .track_scroll(&self.pane_scroll_handle)
                                                                 .custom_scrollbars(
                                                                     Scrollbars::always_visible(ScrollAxes::Horizontal)
                                                                         .tracked_scroll_handle(&self.pane_scroll_handle),
@@ -8683,7 +8682,6 @@ impl Render for Workspace {
                                                                     h_flex()
                                                                         .flex_1()
                                                                         .overflow_x_scroll()
-                                                                        .track_scroll(&self.pane_scroll_handle)
                                                                         .custom_scrollbars(
                                                                             Scrollbars::always_visible(ScrollAxes::Horizontal)
                                                                                 .tracked_scroll_handle(&self.pane_scroll_handle),
