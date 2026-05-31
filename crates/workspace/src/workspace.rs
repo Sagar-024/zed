@@ -8611,10 +8611,10 @@ impl Render for Workspace {
                                                         .flex()
                                                         .flex_col()
                                                         .flex_1()
-                                                        .overflow_hidden()
                                                         .child(
                                                             h_flex()
                                                                 .flex_1()
+                                                                .h_full()
                                                                 .overflow_x_scroll()
                                                                 .custom_scrollbars(
                                                                     Scrollbars::always_visible(ScrollAxes::Horizontal)
@@ -8685,10 +8685,10 @@ impl Render for Workspace {
                                                                 .flex()
                                                                 .flex_col()
                                                                 .flex_1()
-                                                                .overflow_hidden()
                                                                 .child(
                                                                     h_flex()
                                                                         .flex_1()
+                                                                        .h_full()
                                                                         .overflow_x_scroll()
                                                                         .custom_scrollbars(
                                                                             Scrollbars::always_visible(ScrollAxes::Horizontal)
