@@ -8617,12 +8617,18 @@ impl Render for Workspace {
                                                                 .when_some(paddings.0, |this, p| {
                                                                     this.child(p.border_r_1())
                                                                 })
-                                                                .child(self.center.render(
-                                                                    self.zoomed.as_ref(),
-                                                                    &pane_render_context,
-                                                                    window,
-                                                                    cx,
-                                                                ))
+                                                                .child(
+                                                                    div()
+                                                                        .w_full()
+                                                                        .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                        .h_full()
+                                                                        .child(self.center.render(
+                                                                            self.zoomed.as_ref(),
+                                                                            &pane_render_context,
+                                                                            window,
+                                                                            cx,
+                                                                        ))
+                                                                )
                                                                 .when_some(
                                                                     paddings.1,
                                                                     |this, p| {
@@ -8690,12 +8696,18 @@ impl Render for Workspace {
                                                                                 )
                                                                             },
                                                                         )
-                                                                        .child(self.center.render(
-                                                                            self.zoomed.as_ref(),
-                                                                            &pane_render_context,
-                                                                            window,
-                                                                            cx,
-                                                                        ))
+                                                                        .child(
+                                                                            div()
+                                                                                .w_full()
+                                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                                .h_full()
+                                                                                .child(self.center.render(
+                                                                                    self.zoomed.as_ref(),
+                                                                                    &pane_render_context,
+                                                                                    window,
+                                                                                    cx,
+                                                                                ))
+                                                                        )
                                                                         .when_some(
                                                                             paddings.1,
                                                                             |this, p| {
