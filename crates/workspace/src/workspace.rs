@@ -8766,10 +8766,17 @@ impl Render for Workspace {
                                                                 .flex()
                                                                 .flex_col()
                                                                 .flex_1()
-                                                                .overflow_hidden()
                                                                 .child(
                                                                     h_flex()
                                                                         .flex_1()
+                                                                        .h_full()
+                                                                        .overflow_x_scroll()
+                                                                        .custom_scrollbars(
+                                                                            Scrollbars::always_visible(ScrollAxes::Horizontal)
+                                                                                .tracked_scroll_handle(&self.pane_scroll_handle),
+                                                                            window,
+                                                                            cx,
+                                                                        )
                                                                         .when_some(
                                                                             paddings.0,
                                                                             |this, p| {
@@ -8778,12 +8785,18 @@ impl Render for Workspace {
                                                                                 )
                                                                             },
                                                                         )
-                                                                        .child(self.center.render(
-                                                                            self.zoomed.as_ref(),
-                                                                            &pane_render_context,
-                                                                            window,
-                                                                            cx,
-                                                                        ))
+                                                                        .child(
+                                                                            div()
+                                                                                .w_full()
+                                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                                .h_full()
+                                                                                .child(self.center.render(
+                                                                                    self.zoomed.as_ref(),
+                                                                                    &pane_render_context,
+                                                                                    window,
+                                                                                    cx,
+                                                                                ))
+                                                                        )
                                                                         .when_some(
                                                                             paddings.1,
                                                                             |this, p| {
@@ -8823,19 +8836,32 @@ impl Render for Workspace {
                                                 .flex()
                                                 .flex_col()
                                                 .flex_1()
-                                                .overflow_hidden()
                                                 .child(
                                                     h_flex()
                                                         .flex_1()
+                                                        .h_full()
+                                                        .overflow_x_scroll()
+                                                        .custom_scrollbars(
+                                                            Scrollbars::always_visible(ScrollAxes::Horizontal)
+                                                                .tracked_scroll_handle(&self.pane_scroll_handle),
+                                                            window,
+                                                            cx,
+                                                        )
                                                         .when_some(paddings.0, |this, p| {
                                                             this.child(p.border_r_1())
                                                         })
-                                                        .child(self.center.render(
-                                                            self.zoomed.as_ref(),
-                                                            &pane_render_context,
-                                                            window,
-                                                            cx,
-                                                        ))
+                                                        .child(
+                                                            div()
+                                                                .w_full()
+                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                .h_full()
+                                                                .child(self.center.render(
+                                                                    self.zoomed.as_ref(),
+                                                                    &pane_render_context,
+                                                                    window,
+                                                                    cx,
+                                                                ))
+                                                        )
                                                         .when_some(paddings.1, |this, p| {
                                                             this.child(p.border_l_1())
                                                         }),
