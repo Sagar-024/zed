@@ -550,6 +550,12 @@ actions!(
         SwapPaneUp,
         /// Swaps the current pane with the one below.
         SwapPaneDown,
+        /// Scrolls the workspace horizontally to the left by one column.
+        ScrollWorkspaceLeft,
+        /// Scrolls the workspace horizontally to the right by one column.
+        ScrollWorkspaceRight,
+        /// Scrolls the workspace horizontally to a specific column.
+        ScrollWorkspaceToColumn { index: usize },
         // Swaps the current pane with the first available adjacent pane (searching in order: below, above, right, left) and activates that pane.
         SwapPaneAdjacent,
         /// Move the current pane to be at the far left.
@@ -5046,6 +5052,40 @@ impl Workspace {
         window.focus(&last_pane.focus_handle(cx), cx);
     }
 
+    pub fn scroll_workspace_left(&mut self, cx: &mut App) {
+        let columns = self.center.full_height_column_count();
+        if columns <= 1 {
+            return;
+        }
+        if let Some(column_index) = self.center.horizontal_column_index_for_pane(&self.active_pane) {
+            if column_index > 0 {
+                let offset_x = (column_index - 1) as f32 * 800.0;
+                self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
+            }
+        }
+    }
+
+    pub fn scroll_workspace_right(&mut self, cx: &mut App) {
+        let columns = self.center.full_height_column_count();
+        if columns <= 1 {
+            return;
+        }
+        if let Some(column_index) = self.center.horizontal_column_index_for_pane(&self.active_pane) {
+            if column_index + 1 < columns {
+                let offset_x = (column_index + 1) as f32 * 800.0;
+                self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
+            }
+        }
+    }
+
+    pub fn scroll_workspace_to_column(&mut self, index: usize, cx: &mut App) {
+        let columns = self.center.full_height_column_count();
+        if index < columns {
+            let offset_x = index as f32 * 800.0;
+            self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
+        }
+    }
+
     pub fn activate_pane_in_direction(
         &mut self,
         direction: SplitDirection,
@@ -5421,10 +5461,9 @@ impl Workspace {
     ) {
         self.active_pane = pane.clone();
         
-        // Auto-scroll to the newly active pane
-        let panes = self.center.panes();
-        if let Some(index) = panes.iter().position(|p| *p == pane) {
-            let offset_x = index as f32 * 800.0;
+        // Auto-scroll to the newly active pane's horizontal column
+        if let Some(column_index) = self.center.horizontal_column_index_for_pane(pane) {
+            let offset_x = column_index as f32 * 800.0;
             self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
         }
 
@@ -7347,6 +7386,15 @@ impl Workspace {
             .on_action(cx.listener(|workspace, _: &SwapPaneDown, _, cx| {
                 workspace.swap_pane_in_direction(SplitDirection::Down, cx)
             }))
+            .on_action(cx.listener(|workspace, _: &ScrollWorkspaceLeft, _, cx| {
+                workspace.scroll_workspace_left(cx)
+            }))
+            .on_action(cx.listener(|workspace, _: &ScrollWorkspaceRight, _, cx| {
+                workspace.scroll_workspace_right(cx)
+            }))
+            .on_action(cx.listener(|workspace, action: &ScrollWorkspaceToColumn, _, cx| {
+                workspace.scroll_workspace_to_column(action.index, cx)
+            }))
             .on_action(cx.listener(|workspace, _: &SwapPaneAdjacent, window, cx| {
                 const DIRECTION_PRIORITY: [SplitDirection; 4] = [
                     SplitDirection::Down,
@@ -8628,7 +8676,7 @@ impl Render for Workspace {
                                                                 .child(
                                                                     div()
                                                                         .w_full()
-                                                                        .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                        .min_w(px(self.center.full_height_column_count() as f32 * 800.0))
                                                                         .h_full()
                                                                         .child(self.center.render(
                                                                             self.zoomed.as_ref(),
@@ -8707,7 +8755,7 @@ impl Render for Workspace {
                                                                         .child(
                                                                             div()
                                                                                 .w_full()
-                                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                                .min_w(px(self.center.full_height_column_count() as f32 * 800.0))
                                                                                 .h_full()
                                                                                 .child(self.center.render(
                                                                                     self.zoomed.as_ref(),
@@ -8788,7 +8836,7 @@ impl Render for Workspace {
                                                                         .child(
                                                                             div()
                                                                                 .w_full()
-                                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                                .min_w(px(self.center.full_height_column_count() as f32 * 800.0))
                                                                                 .h_full()
                                                                                 .child(self.center.render(
                                                                                     self.zoomed.as_ref(),
@@ -8853,7 +8901,7 @@ impl Render for Workspace {
                                                         .child(
                                                             div()
                                                                 .w_full()
-                                                                .min_w(px(self.center.panes().len() as f32 * 800.0))
+                                                                .min_w(px(self.center.full_height_column_count() as f32 * 800.0))
                                                                 .h_full()
                                                                 .child(self.center.render(
                                                                     self.zoomed.as_ref(),

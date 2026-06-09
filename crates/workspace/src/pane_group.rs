@@ -247,6 +247,16 @@ impl PaneGroup {
         panes
     }
 
+    /// Returns the horizontal column index (0-based) for a given pane.
+    /// Only counts top-level horizontal axis members, not vertical splits.
+    pub fn horizontal_column_index_for_pane(&self, pane: &Entity<Pane>) -> Option<usize> {
+        self.root.horizontal_column_index_for_pane(pane, 0)
+    }
+
+    pub fn full_height_column_count(&self) -> usize {
+        self.root.full_height_column_count()
+    }
+
     pub fn first_pane(&self) -> Entity<Pane> {
         self.root.first_pane()
     }
@@ -317,6 +327,14 @@ impl Member {
         match self {
             Member::Pane(_) => 1,
             Member::Axis(axis) => axis.full_height_column_count(),
+        }
+    }
+
+    fn horizontal_column_index_for_pane(&self, pane: &Entity<Pane>, base: usize) -> Option<usize> {
+        match self {
+            Member::Pane(p) if p == pane => Some(base),
+            Member::Pane(_) => None,
+            Member::Axis(axis) => axis.horizontal_column_index_for_pane(pane, base),
         }
     }
 }
@@ -918,6 +936,27 @@ impl PaneAxis {
                 .map(Member::full_height_column_count)
                 .max()
                 .unwrap_or(1),
+        }
+    }
+
+    fn horizontal_column_index_for_pane(&self, pane: &Entity<Pane>, mut base: usize) -> Option<usize> {
+        if self.axis == Axis::Horizontal {
+            // Horizontal axis: each member is a column
+            for member in &self.members {
+                if let Some(idx) = member.horizontal_column_index_for_pane(pane, base) {
+                    return Some(idx);
+                }
+                base += member.full_height_column_count();
+            }
+            None
+        } else {
+            // Vertical axis: search inside, don't increment base
+            for member in &self.members {
+                if let Some(idx) = member.horizontal_column_index_for_pane(pane, base) {
+                    return Some(idx);
+                }
+            }
+            None
         }
     }
 

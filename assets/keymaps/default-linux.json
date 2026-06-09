@@ -515,6 +515,12 @@
       "ctrl-alt-shift-x": "search::ToggleRegex",
       "alt-r": "search::ToggleRegex",
       "ctrl-k shift-enter": "pane::TogglePinTab",
+      "ctrl-shift-left": "workspace::ScrollWorkspaceLeft",
+      "ctrl-shift-right": "workspace::ScrollWorkspaceRight",
+      "ctrl-shift-up": "workspace::ScrollWorkspaceLeft",
+      "ctrl-shift-down": "workspace::ScrollWorkspaceRight",
+      "alt-shift-left": "workspace::ScrollWorkspaceLeft",
+      "alt-shift-right": "workspace::ScrollWorkspaceRight",
     },
   },
   // Bindings from VS Code
