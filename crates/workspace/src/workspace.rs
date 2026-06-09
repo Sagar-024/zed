@@ -5050,7 +5050,7 @@ impl Workspace {
         window.focus(&last_pane.focus_handle(cx), cx);
     }
 
-    pub fn scroll_workspace_left(&mut self, cx: &mut App) {
+    pub fn scroll_workspace_left(&mut self, _cx: &mut App) {
         let columns = self.center.full_height_column_count();
         if columns <= 1 {
             return;
@@ -5063,7 +5063,7 @@ impl Workspace {
         }
     }
 
-    pub fn scroll_workspace_right(&mut self, cx: &mut App) {
+    pub fn scroll_workspace_right(&mut self, _cx: &mut App) {
         let columns = self.center.full_height_column_count();
         if columns <= 1 {
             return;
@@ -5073,14 +5073,6 @@ impl Workspace {
                 let offset_x = (column_index + 1) as f32 * 800.0;
                 self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
             }
-        }
-    }
-
-    pub fn scroll_workspace_to_column(&mut self, index: usize, cx: &mut App) {
-        let columns = self.center.full_height_column_count();
-        if index < columns {
-            let offset_x = index as f32 * 800.0;
-            self.pane_scroll_handle.set_offset(point(px(offset_x), px(0.0)));
         }
     }
 

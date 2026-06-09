@@ -253,10 +253,6 @@ impl PaneGroup {
         self.root.horizontal_column_index_for_pane(pane, 0)
     }
 
-    pub fn full_height_column_count(&self) -> usize {
-        self.root.full_height_column_count()
-    }
-
     pub fn first_pane(&self) -> Entity<Pane> {
         self.root.first_pane()
     }
