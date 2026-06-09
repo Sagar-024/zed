@@ -554,8 +554,6 @@ actions!(
         ScrollWorkspaceLeft,
         /// Scrolls the workspace horizontally to the right by one column.
         ScrollWorkspaceRight,
-        /// Scrolls the workspace horizontally to a specific column.
-        ScrollWorkspaceToColumn { index: usize },
         // Swaps the current pane with the first available adjacent pane (searching in order: below, above, right, left) and activates that pane.
         SwapPaneAdjacent,
         /// Move the current pane to be at the far left.
@@ -7391,9 +7389,6 @@ impl Workspace {
             }))
             .on_action(cx.listener(|workspace, _: &ScrollWorkspaceRight, _, cx| {
                 workspace.scroll_workspace_right(cx)
-            }))
-            .on_action(cx.listener(|workspace, action: &ScrollWorkspaceToColumn, _, cx| {
-                workspace.scroll_workspace_to_column(action.index, cx)
             }))
             .on_action(cx.listener(|workspace, _: &SwapPaneAdjacent, window, cx| {
                 const DIRECTION_PRIORITY: [SplitDirection; 4] = [
